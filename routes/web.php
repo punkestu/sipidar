@@ -31,6 +31,7 @@ Route::group(['prefix' => '/order', 'middleware' => 'auth'], function () {
         Route::post('/', [OrderController::class, 'create']);
     });
     Route::get('/list', [OrderController::class, 'listView'])->name('list-order');
+    Route::get('/export', [OrderController::class, 'export'])->name('export-order');
     Route::get('{id}', [OrderController::class, 'detailView'])->name('detail-order');
     Route::get('{id}/approve', [OrderController::class, 'approve'])->name('approve-order');
     Route::get('{id}/reject', [OrderController::class, 'reject'])->name('reject-order');

@@ -7,6 +7,8 @@ use App\Models\Order;
 use App\Models\User;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
+use App\Exports\ExportOrders;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OrderController extends Controller
 {
@@ -21,41 +23,43 @@ class OrderController extends Controller
 
     public function create(Request $request)
     {
-        $request->validate([
-            'orderer_name' => 'required',
-            'orderer_phone' => 'required|numeric',
-            'orderer_id' => 'required|numeric',
-            'vehicle_id' => 'required|numeric|exists:vehicles,id',
-            'driver_id' => 'required|numeric|exists:drivers,id',
-            'accepter_level1_id' => 'required|numeric|exists:users,id',
-            'accepter_level2_id' => 'required|numeric|exists:users,id',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after:start_date',
-        ],
-        [
-            'orderer_name.required' => 'Nama peminjam tidak boleh kosong',
-            'orderer_phone.required' => 'Telepon peminjam tidak boleh kosong',
-            'orderer_phone.numeric' => 'Telepon peminjam tidak valid',
-            'orderer_id.required' => 'Nomor identitas peminjam tidak boleh kosong',
-            'orderer_id.numeric' => 'Nomor identitas peminjam tidak valid',
-            'vehicle_id.required' => 'Kendaraan tidak boleh kosong',
-            'vehicle_id.numeric' => 'Kendaraan tidak valid',
-            'vehicle_id.exists:vehicles,id' => 'Kendaraan tidak valid',
-            'driver_id.required' => 'Sopir tidak boleh kosong',
-            'driver_id.numeric' => 'Sopir tidak valid',
-            'driver_id.exists:drivers,id' => 'Sopir tidak valid',
-            'accepter_level1_id.required' => 'Pimpinan level 1 tidak boleh kosong',
-            'accepter_level1_id.numeric' => 'Pimpinan level 1 tidak valid',
-            'accepter_level1_id.exists:users,id' => 'Pimpinan level 1 tidak valid',
-            'accepter_level2_id.required' => 'Pimpinan level 2 tidak boleh kosong',
-            'accepter_level2_id.numeric' => 'Pimpinan level 2 tidak valid',
-            'accepter_level2_id.exists:users,id' => 'Pimpinan level 2 tidak valid',
-            'start_date.required' => 'Tanggal penggunaan tidak boleh kosong',
-            'start_date.date' => 'Tanggal penggunaan tidak valid',
-            'end_date.required' => 'Tanggal pengembalian tidak boleh kosong',
-            'end_date.date' => 'Tanggal pengembalian tidak valid',
-            'end_date.after' => 'Tanggal pengembalian harus setelah tanggal mulai',
-        ]);
+        $request->validate(
+            [
+                'orderer_name' => 'required',
+                'orderer_phone' => 'required|numeric',
+                'orderer_id' => 'required|numeric',
+                'vehicle_id' => 'required|numeric|exists:vehicles,id',
+                'driver_id' => 'required|numeric|exists:drivers,id',
+                'accepter_level1_id' => 'required|numeric|exists:users,id',
+                'accepter_level2_id' => 'required|numeric|exists:users,id',
+                'start_date' => 'required|date',
+                'end_date' => 'required|date|after:start_date',
+            ],
+            [
+                'orderer_name.required' => 'Nama peminjam tidak boleh kosong',
+                'orderer_phone.required' => 'Telepon peminjam tidak boleh kosong',
+                'orderer_phone.numeric' => 'Telepon peminjam tidak valid',
+                'orderer_id.required' => 'Nomor identitas peminjam tidak boleh kosong',
+                'orderer_id.numeric' => 'Nomor identitas peminjam tidak valid',
+                'vehicle_id.required' => 'Kendaraan tidak boleh kosong',
+                'vehicle_id.numeric' => 'Kendaraan tidak valid',
+                'vehicle_id.exists:vehicles,id' => 'Kendaraan tidak valid',
+                'driver_id.required' => 'Sopir tidak boleh kosong',
+                'driver_id.numeric' => 'Sopir tidak valid',
+                'driver_id.exists:drivers,id' => 'Sopir tidak valid',
+                'accepter_level1_id.required' => 'Pimpinan level 1 tidak boleh kosong',
+                'accepter_level1_id.numeric' => 'Pimpinan level 1 tidak valid',
+                'accepter_level1_id.exists:users,id' => 'Pimpinan level 1 tidak valid',
+                'accepter_level2_id.required' => 'Pimpinan level 2 tidak boleh kosong',
+                'accepter_level2_id.numeric' => 'Pimpinan level 2 tidak valid',
+                'accepter_level2_id.exists:users,id' => 'Pimpinan level 2 tidak valid',
+                'start_date.required' => 'Tanggal penggunaan tidak boleh kosong',
+                'start_date.date' => 'Tanggal penggunaan tidak valid',
+                'end_date.required' => 'Tanggal pengembalian tidak boleh kosong',
+                'end_date.date' => 'Tanggal pengembalian tidak valid',
+                'end_date.after' => 'Tanggal pengembalian harus setelah tanggal mulai',
+            ]
+        );
         $orderedVehicle = Order::where('vehicle_id', $request->vehicle_id)->where('status', '!=', 'selesai')->first();
         if ($orderedVehicle && ($request->start_date >= $orderedVehicle->start_date && $request->start_date <= $orderedVehicle->end_date || $request->end_date >= $orderedVehicle->start_date && $request->end_date <= $orderedVehicle->end_date)) {
             return redirect()->back()->withErrors(['error' => 'Kendaraan sedang dipinjam pada jangka waktu tersebut'])->withInput();
@@ -85,12 +89,18 @@ class OrderController extends Controller
     public function detailView($id)
     {
         $order = Order::find($id);
+        if (!$order) {
+            return redirect()->route("dashboard");
+        }
         return view('order', compact('order'));
     }
 
     public function approve($id)
     {
         $order = Order::find($id);
+        if (!$order) {
+            return redirect()->route("dashboard");
+        }
         if ($order->status === 'ditolak') {
             return redirect()->back()->with('error', 'Peminjaman sudah ditolak');
         }
@@ -110,6 +120,9 @@ class OrderController extends Controller
     public function reject($id)
     {
         $order = Order::find($id);
+        if (!$order) {
+            return redirect()->route("dashboard");
+        }
         if ($order->status === 'ditolak') {
             return redirect()->back()->with('error', 'Peminjaman sudah ditolak');
         }
@@ -119,5 +132,28 @@ class OrderController extends Controller
             return redirect()->back()->with('success', 'Peminjaman berhasil ditolak');
         }
         return redirect()->route("dashboard");
+    }
+
+    public function return($id)
+    {
+        $order = Order::find($id);
+        if (!$order) {
+            return redirect()->route("dashboard");
+        }
+        if ($order->status === 'selesai') {
+            return redirect()->back()->with('error', 'Peminjaman sudah selesai');
+        }
+        if ($order->status === 'disetujui' && auth()->user()->role->name === "admin") {
+            $order->status = 'selesai';
+            $order->save();
+            return redirect()->back()->with('success', 'Peminjaman berhasil selesai');
+        }
+        return redirect()->route("dashboard");
+    }
+
+    public function export()
+    {
+        $fileName = 'users.xlsx';
+        return Excel::download(new ExportOrders, $fileName);
     }
 }

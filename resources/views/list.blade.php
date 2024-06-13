@@ -7,7 +7,10 @@
     @include('components.header')
 
     <main class="flex flex-col gap-4 border p-4 m-4 bg-white rounded-md min-h-[80vh]">
-        <h1 class="font-semibold text-xl">List Peminjaman</h1>
+        <section class="flex gap-2 items-center">
+            <h1 class="font-semibold text-xl">List Peminjaman</h1>
+            <a href="/order/export" class="self-start font-semibold bg-[#2602FF] text-white py-1 px-2 rounded-md">Export</a>
+        </section>
         <hr>
         @if (session('success'))
             <div class="col-span-6 bg-blue-100 p-2 rounded-sm">
@@ -38,7 +41,7 @@
                             <td>{{ $order->end_date }}</td>
                             <td>
                                 <p
-                                    class="mx-2 px-4 py-1 text-white text-center rounded-full {{ $order->status === 'diajukan' ? 'bg-blue-500' : ($order->status === 'disetujui' || $order->status === 'disetujuilv1' ? 'bg-green-500' : 'bg-red-500') }}">
+                                    class="mx-2 px-4 py-1 text-white text-center rounded-full {{ $order->status === 'diajukan' || $order->status === 'selesai' ? 'bg-blue-500' : ($order->status === 'disetujui' || $order->status === 'disetujuilv1' ? 'bg-green-500' : 'bg-red-500') }}">
                                     {{ $order->status }}</p>
                             </td>
                             <td>

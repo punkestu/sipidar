@@ -17,7 +17,7 @@
         <label class="col-span-6">
             <h2 class="font-medium mb-2 text-center">Status</h2>
             <p
-                class="w-full px-2 py-1 text-white text-center rounded-full {{ $order->status === 'diajukan' ? 'bg-blue-500' : ($order->status === 'disetujui' || $order->status === 'disetujuilv1' ? 'bg-green-500' : 'bg-red-500') }}">
+                class="w-full px-2 py-1 text-white text-center rounded-full {{ $order->status === 'diajukan' || $order->status === 'selesai' ? 'bg-blue-500' : ($order->status === 'disetujui' || $order->status === 'disetujuilv1' ? 'bg-green-500' : 'bg-red-500') }}">
                 {{ $order->status }}</p>
         </label>
         <label class="col-span-3 md:col-span-2">
