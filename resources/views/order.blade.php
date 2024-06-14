@@ -48,9 +48,13 @@
             <h2 class="font-medium mb-2">Pimpinan Level 2</h2>
             <p class="w-full py-1">{{ $order->accepterLevel2->name }}</p>
         </label>
-        <label class="col-span-6">
+        <label class="col-span-3 md:col-span-2">
             <h2 class="font-medium mb-2">Tanggal Penggunaan</h2>
             <p class="w-full py-1">{{ $order->start_date }}</p>
+        </label>
+        <label class="col-span-3 md:col-span-4">
+            <h2 class="font-medium mb-2">Tanggal Pengembalian</h2>
+            <p class="w-full py-1">{{ $order->end_date }}</p>
         </label>
         <label class="col-span-6">
             <h2 class="font-medium mb-2">Alasan Peminjaman</h2>

@@ -18,7 +18,7 @@ SIPIDAR merupakan aplikasi yang berguna untuk melakukan manajemen peminjaman ken
 9. ```php artisan db:seed VehicleSeeder```
 10. ```php artisan serve```
 
-## Cara Penggunaa
+## Cara Penggunaan
 ### Menambahkan data peminjaman
 1. Login sebagai admin (lihat di list dummy user)
 2. Masuk ke tab ```Pinjam``` di header
