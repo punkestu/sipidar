@@ -1,5 +1,5 @@
-<header class="flex flex-col md:flex-row justify-between items-center gap-2 p-4 bg-white sticky top-0">
-    <img src="/Logo.svg" alt="Logo" class="w-1/3 md:w-1/12">
+<header class="flex flex-col md:flex-row justify-between items-center gap-2 p-4 bg-white sticky top-0 z-20">
+    <a href="/" class="w-1/3 md:w-1/12"><img src="/Logo.svg" alt="Logo"></a>
     <nav class="md:text-sm font-medium">
         <ul class="flex gap-4">
             @auth

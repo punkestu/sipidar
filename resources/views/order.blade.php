@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-@include('components.head', ['subtitle' => 'Login'])
+@include('components.head', ['subtitle' => 'Order'])
 
 <body class="bg-gray-100">
     @include('components.header')

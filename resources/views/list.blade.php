@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-@include('components.head', ['useTable' => true])
+@include('components.head', ['useTable' => true, 'subtitle' => 'Orders'])
 
 <body class="bg-gray-100">
     @include('components.header')

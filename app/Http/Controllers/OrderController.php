@@ -153,7 +153,7 @@ class OrderController extends Controller
 
     public function export()
     {
-        $fileName = 'users.xlsx';
+        $fileName = 'peminjaman.xlsx';
         return Excel::download(new ExportOrders, $fileName);
     }
 }

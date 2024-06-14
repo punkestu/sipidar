@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-@include('components.head', ['subtitle' => 'Dashboard'])
+@include('components.head', ['subtitle' => 'Pinjam'])
 
 <body class="bg-gray-100">
     @include('components.header')
