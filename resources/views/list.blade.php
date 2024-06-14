@@ -9,7 +9,8 @@
     <main class="flex flex-col gap-4 border p-4 m-4 bg-white rounded-md min-h-[80vh]">
         <section class="flex gap-2 items-center">
             <h1 class="font-semibold text-xl">List Peminjaman</h1>
-            <a href="/order/export" class="self-start font-semibold bg-[#2602FF] text-white py-1 px-2 rounded-md">Export</a>
+            <a href="/order/export"
+                class="self-start font-semibold bg-[#2602FF] text-white py-1 px-2 rounded-md">Export</a>
         </section>
         <hr>
         @if (session('success'))
@@ -49,8 +50,8 @@
                                     <a href="/order/{{ $order->id }}"
                                         class="font-semibold bg-[#2602FF] text-white py-1 px-2 rounded-md">Detail</a>
                                     @if (
-                                        ($order->status == 'diajukan' && auth()->user()->id === $order->accepter_level1_id) ||
-                                            ($order->status == 'disetujuilv1' && auth()->user()->id === $order->accepter_level2_id))
+                                        ($order->status == 'diajukan' && auth()->user()->id == $order->accepter_level1_id) ||
+                                            ($order->status == 'disetujuilv1' && auth()->user()->id == $order->accepter_level2_id))
                                         <a href="/order/{{ $order->id }}/approve"
                                             class="font-semibold bg-[#00CF15] text-white py-1 px-2 rounded-md">Approve</a>
                                         <a href="/order/{{ $order->id }}/reject"

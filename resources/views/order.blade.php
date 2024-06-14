@@ -61,8 +61,8 @@
             <p class="w-full py-1">{{ $order->reason !== null ? $order->reason : '-' }}</p>
         </label>
         @if (
-            ($order->status == 'diajukan' && auth()->user()->id === $order->accepter_level1_id) ||
-                ($order->status == 'disetujuilv1' && auth()->user()->id === $order->accepter_level2_id))
+            ($order->status == 'diajukan' && auth()->user()->id == $order->accepter_level1_id) ||
+                ($order->status == 'disetujuilv1' && auth()->user()->id == $order->accepter_level2_id))
             <a href="/order/{{ $order->id }}/approve"
                 class="text-center col-span-3 font-semibold bg-[#00CF15] text-white py-1 px-2 rounded-md">Approve</a>
             <a href="/order/{{ $order->id }}/reject"

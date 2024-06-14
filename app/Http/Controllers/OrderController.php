@@ -104,12 +104,12 @@ class OrderController extends Controller
         if ($order->status === 'ditolak') {
             return redirect()->back()->with('error', 'Peminjaman sudah ditolak');
         }
-        if ($order->status === 'diajukan' && $order->accepter_level1_id === auth()->user()->id) {
+        if ($order->status === 'diajukan' && $order->accepter_level1_id == auth()->user()->id) {
             $order->status = 'disetujuilv1';
             $order->save();
             return redirect()->back()->with('success', 'Peminjaman berhasil disetujui');
         }
-        if ($order->status === 'disetujuilv1' && $order->accepter_level2_id === auth()->user()->id) {
+        if ($order->status === 'disetujuilv1' && $order->accepter_level2_id == auth()->user()->id) {
             $order->status = 'disetujui';
             $order->save();
             return redirect()->back()->with('success', 'Peminjaman berhasil disetujui');
@@ -126,7 +126,7 @@ class OrderController extends Controller
         if ($order->status === 'ditolak') {
             return redirect()->back()->with('error', 'Peminjaman sudah ditolak');
         }
-        if (($order->status === 'diajukan' && $order->accepter_level1_id === auth()->user()->id) || ($order->status === 'disetujuilv1' && $order->accepter_level2_id === auth()->user()->id)) {
+        if (($order->status === 'diajukan' && $order->accepter_level1_id == auth()->user()->id) || ($order->status === 'disetujuilv1' && $order->accepter_level2_id == auth()->user()->id)) {
             $order->status = 'ditolak';
             $order->save();
             return redirect()->back()->with('success', 'Peminjaman berhasil ditolak');
